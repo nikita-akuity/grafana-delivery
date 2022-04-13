@@ -6,3 +6,5 @@ resources:
 
 generators:
 - configmap-dashboards.yaml
+
+namePrefix: my-

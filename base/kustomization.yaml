@@ -3,7 +3,6 @@ kind: Kustomization
 
 configurations:
 - kustomizeconfig/rollout-transform.yaml
-- kustomizeconfig/skip-name-transform.yaml
 
 helmCharts:
 - name: grafana

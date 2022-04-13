@@ -1,5 +1,0 @@
-namePrefix:
-- path: metadata/name
-  apiVersion: v1
-  kind: Service
-  skip: true

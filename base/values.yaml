@@ -22,6 +22,12 @@ serviceMonitor:
   scrapeTimeout: 30s
   relabelings: []
 
+ingress:
+  enabled: true
+  ingressClassName: alb
+  hosts:
+  - grafana-test.demo.akuity.io
+
 resources:
  limits:
    cpu: 300m
