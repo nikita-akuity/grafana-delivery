@@ -6,7 +6,6 @@ configurations:
 
 resources:
   - ../../base
-  - services.yaml
 
 generators:
 - configmap-dashboards.yaml
