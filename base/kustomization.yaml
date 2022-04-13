@@ -3,11 +3,14 @@ kind: Kustomization
 
 helmCharts:
 - name: grafana
-  releaseName: test
+  releaseName: demo
   version: 6.26.1
   repo: https://grafana.github.io/helm-charts
   valuesFile: values.yaml
   namespace: grafana
+
+resources:
+- services.yaml
 
 patches:
 - target:
