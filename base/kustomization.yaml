@@ -12,9 +12,6 @@ helmCharts:
   valuesFile: values.yaml
   namespace: grafana
 
-resources:
-- services.yaml
-
 patches:
 - target:
     kind: Deployment
