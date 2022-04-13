@@ -1,0 +1,26 @@
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+    # targetPort: 4181 To be used with a proxy extraContainer
+  annotations: {}
+  labels: {}
+  portName: service
+
+serviceMonitor:
+  enabled: true
+  labels: {}
+  interval: 1m
+  scheme: http
+  tlsConfig: {}
+  scrapeTimeout: 30s
+  relabelings: []
+
+resources:
+ limits:
+   cpu: 300m
+   memory: 512Mi
+ requests:
+   cpu: 100m
+   memory: 128Mi

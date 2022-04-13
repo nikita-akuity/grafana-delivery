@@ -1,0 +1,24 @@
+- op: replace
+  path: /kind
+  value: Rollout
+- op: replace
+  path: /apiVersion
+  value: argoproj.io/v1alpha1
+- op: add
+  path: /spec/strategy
+  value:
+    canary:
+      canaryService: grafana-desired
+      stableService: grafana-stable
+      steps:
+        - setWeight: 5
+        - pause: {}
+        - setWeight: 25
+        - pause:
+            duration: 10
+        - setWeight: 50
+        - pause:
+            duration: 10
+        - setWeight: 75
+        - pause:
+            duration: 10
