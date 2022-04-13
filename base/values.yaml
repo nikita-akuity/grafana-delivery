@@ -8,8 +8,13 @@ service:
   labels: {}
   portName: service
 
+rbac:
+  create: true
+  namespaced: true
+  pspEnabled: false
+
 serviceMonitor:
-  enabled: true
+  enabled: false
   labels: {}
   interval: 1m
   scheme: http
