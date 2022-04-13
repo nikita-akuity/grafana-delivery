@@ -4,6 +4,9 @@
 - op: replace
   path: /apiVersion
   value: argoproj.io/v1alpha1
+- op: replace
+  path: /spec/replicas
+  value: 3
 - op: add
   path: /spec/strategy
   value:
@@ -11,14 +14,8 @@
       canaryService: grafana-desired
       stableService: grafana-stable
       steps:
-        - setWeight: 5
+        - setWeight: 30
         - pause: {}
-        - setWeight: 25
-        - pause:
-            duration: 10
-        - setWeight: 50
-        - pause:
-            duration: 10
-        - setWeight: 75
+        - setWeight: 60
         - pause:
             duration: 10
