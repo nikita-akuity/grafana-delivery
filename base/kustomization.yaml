@@ -14,13 +14,14 @@ helmCharts:
 
 resources:
 - services.yaml
+- rollout.yaml
 
 patches:
 - target:
     kind: Deployment
     version: v1
     group: apps
-  path: patch-deployment-rollout.yaml
+  path: patch-deployments.yaml
 
 openapi:
   path: kustomizeconfig/rollout_cr_schema.json
