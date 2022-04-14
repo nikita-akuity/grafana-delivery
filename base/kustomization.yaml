@@ -4,9 +4,6 @@ kind: Kustomization
 configurations:
 - kustomizeconfig/rollout-transform.yaml
 
-openapi:
-  path: kustomizeconfig/rollout_cr_schema.json
-
 resources:
 - all.yaml
 
