@@ -2,6 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
   name: grafana-rollout
+  namespace: grafana
 spec:
   replicas: 2
   workloadRef: 
