@@ -4,13 +4,11 @@ kind: Kustomization
 configurations:
 - kustomizeconfig/rollout-transform.yaml
 
-helmCharts:
-- name: grafana
-  releaseName: demo
-  version: 6.26.1
-  repo: https://grafana.github.io/helm-charts
-  valuesFile: values.yaml
-  namespace: grafana
+openapi:
+  path: kustomizeconfig/rollout_cr_schema.json
+
+generators:
+- helm-chart.yaml
 
 resources:
 - services.yaml
@@ -22,6 +20,3 @@ patches:
     version: v1
     group: apps
   path: patch-deployments.yaml
-
-openapi:
-  path: kustomizeconfig/rollout_cr_schema.json
