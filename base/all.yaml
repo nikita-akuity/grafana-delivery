@@ -1,0 +1,321 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/instance: demo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/version: 8.4.6
+    helm.sh/chart: grafana-6.26.1
+  name: demo-grafana
+  namespace: grafana
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/instance: demo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/version: 8.4.6
+    helm.sh/chart: grafana-6.26.1
+  name: demo-grafana-test
+  namespace: grafana
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    app.kubernetes.io/instance: demo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/version: 8.4.6
+    helm.sh/chart: grafana-6.26.1
+  name: demo-grafana
+  namespace: grafana
+rules: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/instance: demo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/version: 8.4.6
+    helm.sh/chart: grafana-6.26.1
+  name: demo-grafana
+  namespace: grafana
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: demo-grafana
+subjects:
+- kind: ServiceAccount
+  name: demo-grafana
+  namespace: grafana
+---
+apiVersion: v1
+data:
+  grafana.ini: |
+    [analytics]
+    check_for_updates = true
+    [grafana_net]
+    url = https://grafana.net
+    [log]
+    mode = console
+    [paths]
+    data = /var/lib/grafana/
+    logs = /var/log/grafana
+    plugins = /var/lib/grafana/plugins
+    provisioning = /etc/grafana/provisioning
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/instance: demo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/version: 8.4.6
+    helm.sh/chart: grafana-6.26.1
+  name: demo-grafana
+  namespace: grafana
+---
+apiVersion: v1
+data:
+  run.sh: |-
+    @test "Test Health" {
+      url="http://demo-grafana/api/health"
+
+      code=$(wget --server-response --spider --timeout 10 --tries 1 ${url} 2>&1 | awk '/^  HTTP/{print $2}')
+      [ "$code" == "200" ]
+    }
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/instance: demo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/version: 8.4.6
+    helm.sh/chart: grafana-6.26.1
+  name: demo-grafana-test
+  namespace: grafana
+---
+apiVersion: v1
+data:
+  admin-password: anZZekNpMUp3ZzVYdDVIa0RyN1ZGaGVYbHhoZ1BvQlVNOE1QWHYxbA==
+  admin-user: YWRtaW4=
+  ldap-toml: ""
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/instance: demo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/version: 8.4.6
+    helm.sh/chart: grafana-6.26.1
+  name: demo-grafana
+  namespace: grafana
+type: Opaque
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: demo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/version: 8.4.6
+    helm.sh/chart: grafana-6.26.1
+  name: demo-grafana
+  namespace: grafana
+spec:
+  ports:
+  - name: service
+    port: 80
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app.kubernetes.io/instance: demo
+    app.kubernetes.io/name: grafana
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-grafana-preview
+spec:
+  ports:
+  - name: service
+    port: 80
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app.kubernetes.io/instance: demo
+    app.kubernetes.io/name: grafana
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: demo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/version: 8.4.6
+    helm.sh/chart: grafana-6.26.1
+  name: demo-grafana
+  namespace: grafana
+spec:
+  replicas: 0
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: demo
+      app.kubernetes.io/name: grafana
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        checksum/config: 6cc017378ca5070cda2eecd8d501b8ce3eacd4fefc8267e3c57be15f333bf3eb
+        checksum/dashboards-json-config: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+        checksum/sc-dashboard-provider-config: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+        checksum/secret: 11fe006a66dfa606c39aba307b5b2606b1fc9defc38f89e07a579083e8093293
+      labels:
+        app.kubernetes.io/instance: demo
+        app.kubernetes.io/name: grafana
+    spec:
+      automountServiceAccountToken: true
+      containers:
+      - env:
+        - name: GF_SECURITY_ADMIN_USER
+          valueFrom:
+            secretKeyRef:
+              key: admin-user
+              name: demo-grafana
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: admin-password
+              name: demo-grafana
+        - name: GF_PATHS_DATA
+          value: /var/lib/grafana/
+        - name: GF_PATHS_LOGS
+          value: /var/log/grafana
+        - name: GF_PATHS_PLUGINS
+          value: /var/lib/grafana/plugins
+        - name: GF_PATHS_PROVISIONING
+          value: /etc/grafana/provisioning
+        image: grafana/grafana:8.4.6
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 60
+          timeoutSeconds: 30
+        name: grafana
+        ports:
+        - containerPort: 80
+          name: service
+          protocol: TCP
+        - containerPort: 3000
+          name: grafana
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+        resources: {}
+        volumeMounts:
+        - mountPath: /etc/grafana/grafana.ini
+          name: config
+          subPath: grafana.ini
+        - mountPath: /var/lib/grafana
+          name: storage
+      enableServiceLinks: true
+      securityContext:
+        fsGroup: 472
+        runAsGroup: 472
+        runAsUser: 472
+      serviceAccountName: demo-grafana
+      volumes:
+      - configMap:
+          name: demo-grafana
+        name: config
+      - emptyDir: {}
+        name: storage
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: grafana-rollout
+spec:
+  replicas: 2
+  strategy:
+    blueGreen:
+      activeService: demo-grafana
+      autoPromotionEnabled: false
+      previewService: demo-grafana-preview
+  workloadRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: demo-grafana
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app.kubernetes.io/instance: demo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/version: 8.4.6
+    helm.sh/chart: grafana-6.26.1
+  name: demo-grafana
+  namespace: grafana
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: grafana-test.demo.akuity.io
+    http:
+      paths:
+      - backend:
+          service:
+            name: demo-grafana
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    helm.sh/hook: test-success
+  labels:
+    app.kubernetes.io/instance: demo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/version: 8.4.6
+    helm.sh/chart: grafana-6.26.1
+  name: demo-grafana-test
+  namespace: grafana
+spec:
+  containers:
+  - command:
+    - /opt/bats/bin/bats
+    - -t
+    - /tests/run.sh
+    image: bats/bats:v1.4.1
+    imagePullPolicy: IfNotPresent
+    name: demo-test
+    volumeMounts:
+    - mountPath: /tests
+      name: tests
+      readOnly: true
+  restartPolicy: Never
+  serviceAccountName: demo-grafana-test
+  volumes:
+  - configMap:
+      name: demo-grafana-test
+    name: tests

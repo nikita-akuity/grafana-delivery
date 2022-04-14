@@ -7,16 +7,6 @@ configurations:
 openapi:
   path: kustomizeconfig/rollout_cr_schema.json
 
-generators:
-- helm-chart.yaml
-
 resources:
-- services.yaml
-- rollout.yaml
+- all.yaml
 
-patches:
-- target:
-    kind: Deployment
-    version: v1
-    group: apps
-  path: patch-deployments.yaml
