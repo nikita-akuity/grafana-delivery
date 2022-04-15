@@ -13,6 +13,11 @@ rbac:
   namespaced: true
   pspEnabled: false
 
+admin:
+  existingSecret: admin-creds
+  userKey: user
+  passwordKey: password
+
 serviceMonitor:
   enabled: false
   labels: {}

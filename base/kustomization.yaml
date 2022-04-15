@@ -15,6 +15,7 @@ helmCharts:
 resources:
 - services.yaml
 - rollout.yaml
+- admin-creds.yaml
 
 patches:
 - target:

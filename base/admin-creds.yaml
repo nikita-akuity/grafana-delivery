@@ -1,0 +1,21 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: admin-creds
+  namespace: grafana
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: fake
+    kind: ClusterSecretStore
+  target:
+    name: admin-creds
+  data:
+  - secretKey: user
+    remoteRef:
+      key: /demo/grafana/admin-user
+      version: v1
+  - secretKey: password
+    remoteRef:
+      key: /demo/grafana/admin-password
+      version: v1
