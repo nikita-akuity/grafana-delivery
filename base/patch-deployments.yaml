@@ -1,3 +1,8 @@
-- op: replace
-  path: /spec/replicas
-  value: 0
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-grafana
+  namespace: grafana
+spec:
+  replicas: 0
+  revisionHistoryLimit: 0

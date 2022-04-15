@@ -18,8 +18,4 @@ resources:
 - admin-creds.yaml
 
 patches:
-- target:
-    kind: Deployment
-    version: v1
-    group: apps
-  path: patch-deployments.yaml
+- patch-deployments.yaml

@@ -4,7 +4,8 @@ metadata:
   name: grafana-rollout
   namespace: grafana
 spec:
-  replicas: 2
+  replicas: 1
+  revisionHistoryLimit: 2
   workloadRef: 
     apiVersion: apps/v1
     kind: Deployment
