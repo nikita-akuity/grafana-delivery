@@ -2,7 +2,7 @@ apiVersion: builtin
 kind: ConfigMapGenerator
 behavior: create
 metadata:
-  name: test-cm
+  name: argocd-dashboards-cm
   namespace: grafana
 files:
-  - dashboards/test.json
+  - dashboards/argocd.json

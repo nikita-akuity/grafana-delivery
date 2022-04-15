@@ -19,3 +19,6 @@ resources:
 
 patches:
 - patch-deployments.yaml
+
+generators:
+- configmap-dashboards.yaml
