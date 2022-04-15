@@ -10,7 +10,13 @@ helmCharts:
   namespace: grafana
 
 resources:
+- namespace.yaml
 - admin-creds.yaml
 
 generators:
 - configmap-dashboards.yaml
+- configmap-env.yaml
+
+replacements:
+- path: replace-namespace.yaml
+- path: replace-hostname.yaml

@@ -1,11 +1,9 @@
-grafana.ini:
-  server:
-    root_url: https://grafana-test.demo.akuity.io
 ingress:
   enabled: true
   ingressClassName: traefik
   hosts:
-  - grafana-test.demo.akuity.io
+  - grafana.demo.akuity.io
+
 service:
   enabled: true
   type: ClusterIP
@@ -25,6 +23,9 @@ admin:
   existingSecret: admin-creds
   userKey: user
   passwordKey: password
+
+envFromConfigMaps:
+- name: env-cm
 
 datasources:
  datasources.yaml:
