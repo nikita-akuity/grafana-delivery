@@ -26,9 +26,20 @@ admin:
   userKey: user
   passwordKey: password
 
+datasources:
+ datasources.yaml:
+   apiVersion: 1
+   datasources:
+   - name: Prometheus Local
+     type: prometheus
+     url: http://prometheus-operated.prometheus.svc.cluster.local:9090
+     access: proxy
+     isDefault: true
+
 serviceMonitor:
   enabled: true
-  labels: {}
+  labels:
+    release: demo
   interval: 1m
   scheme: http
   tlsConfig: {}
