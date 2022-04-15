@@ -15,6 +15,7 @@ helmCharts:
 resources:
 - services.yaml
 - rollout.yaml
+- namespace.yaml
 - admin-creds.yaml
 
 patches:
@@ -22,3 +23,8 @@ patches:
 
 generators:
 - configmap-dashboards.yaml
+- configmap-env.yaml
+
+replacements:
+- path: replace-namespace.yaml
+- path: replace-hostname.yaml
