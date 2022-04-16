@@ -4131,10 +4131,9 @@ apiVersion: v1
 data:
   GF_SERVER_ROOT_URL: https://stage-grafana.demo.akuity.io
   NAMESPACE: stage-grafana
-  USER: runner
 kind: ConfigMap
 metadata:
-  name: env-cm-mf24fm6tbt
+  name: env-cm-f47t2256b9
   namespace: stage-grafana
 ---
 apiVersion: v1
@@ -4212,7 +4211,7 @@ spec:
           value: /etc/grafana/provisioning
         envFrom:
         - configMapRef:
-            name: env-cm-mf24fm6tbt
+            name: env-cm-f47t2256b9
             optional: false
         image: grafana/grafana:8.4.6
         imagePullPolicy: IfNotPresent
