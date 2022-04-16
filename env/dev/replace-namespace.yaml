@@ -1,0 +1,12 @@
+source:
+ kind: ConfigMap
+ name: env-cm
+ fieldPath: data.NAMESPACE
+targets:
+- select:
+    kind: Namespace
+    name: grafana
+- select:
+    namespace: grafana
+  fieldPaths:
+  - metadata.namespace

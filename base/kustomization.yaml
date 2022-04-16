@@ -16,7 +16,3 @@ resources:
 generators:
 - configmap-dashboards.yaml
 - configmap-env.yaml
-
-replacements:
-- path: replace-namespace.yaml
-- path: replace-hostname.yaml
