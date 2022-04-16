@@ -1,0 +1,52 @@
+name: Render Manifests
+on:
+  push:
+    paths-ignore:
+    - '**/README.md'
+    branches:
+    - main
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        env: [dev, stage, prod]
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        # fetch-depth: 0 needed to get all branches
+        fetch-depth: 0
+    - uses: fregante/setup-git-user@v1
+    - 
+      name: Render manifests
+      run: |
+        kustomize build env/${{ matrix.env }} --enable-helm > /tmp/all.yaml
+        if ! git checkout env/${{ matrix.env }} -- ; then
+          git checkout --orphan env/${{ matrix.env }}
+          git rm -rf .
+          cp /tmp/all.yaml .
+          git add .
+          git commit -m "${{ github.event.head_commit.message }}"
+          git push --set-upstream origin env/${{ matrix.env }}
+        else
+          cp /tmp/all.yaml .
+        fi 
+    -
+      name: Deploy to ${{ matrix.env }}
+      if: ${{ matrix.env == 'dev' || matrix.env == 'stage' }}
+      run: |
+        if ! git diff --quiet HEAD ; then 
+          git add .
+          git commit -m "${{ github.event.head_commit.message }}"
+          git push --set-upstream origin env/${{ matrix.env }}
+        fi
+    -
+      name: Deploy PR to ${{ matrix.env }}
+      uses: peter-evans/create-pull-request@v4
+      if: ${{ matrix.env == 'prod' }}
+      with:
+        title: ${{ github.event.head_commit.message }}
+        commit-message: ${{ github.event.head_commit.message }}
+        base: env/${{ matrix.env }}
+        branch: deploy-pr/env/${{ matrix.env }}
