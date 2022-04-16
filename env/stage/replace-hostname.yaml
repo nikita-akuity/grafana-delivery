@@ -1,0 +1,13 @@
+source:
+  kind: ConfigMap
+  name: env-cm
+  fieldPath: data.GF_SERVER_ROOT_URL
+  options:
+    delimiter: '/'
+    index: 2
+targets:
+- select:
+    kind: Ingress
+    name: demo-grafana
+  fieldPaths:
+  - spec.rules.[host=grafana.demo.akuity.io].host
