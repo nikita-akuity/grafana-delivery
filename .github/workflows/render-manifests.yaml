@@ -21,12 +21,12 @@ jobs:
     - 
       name: Render manifests
       run: |
-        kustomize build env/${{ matrix.env }} --enable-helm > /tmp/all.yaml
+        kustomize build env/${{ matrix.env }} --enable-helm --output /tmp/all.yaml
         if ! git checkout env/${{ matrix.env }} -- ; then
           git checkout --orphan env/${{ matrix.env }}
           git rm -rf .
           cp /tmp/all.yaml .
-          git add .
+          git add all.yaml
           git commit -m "${{ github.event.head_commit.message }}"
           git push --set-upstream origin env/${{ matrix.env }}
         else
@@ -34,10 +34,10 @@ jobs:
         fi 
     -
       name: Deploy to ${{ matrix.env }}
-      if: ${{ matrix.env == 'dev' || matrix.env == 'stage' }}
+      if: ${{ matrix.env != 'prod' }}
       run: |
         if ! git diff --quiet HEAD ; then 
-          git add .
+          git add all.yaml
           git commit -m "${{ github.event.head_commit.message }}"
           git push --set-upstream origin env/${{ matrix.env }}
         fi
