@@ -1,0 +1,8 @@
+apiVersion: builtin
+kind: ConfigMapGenerator
+behavior: merge
+metadata:
+  name: env-cm
+  namespace: grafana
+envs:
+  - .env
