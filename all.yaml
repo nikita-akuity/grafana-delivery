@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: nikita-grafana
+  name: dev-grafana
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/version: 8.4.6
     helm.sh/chart: grafana-6.26.1
   name: demo-grafana
-  namespace: nikita-grafana
+  namespace: dev-grafana
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -25,7 +25,7 @@ metadata:
     app.kubernetes.io/version: 8.4.6
     helm.sh/chart: grafana-6.26.1
   name: demo-grafana-test
-  namespace: nikita-grafana
+  namespace: dev-grafana
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -37,7 +37,7 @@ metadata:
     app.kubernetes.io/version: 8.4.6
     helm.sh/chart: grafana-6.26.1
   name: demo-grafana
-  namespace: nikita-grafana
+  namespace: dev-grafana
 rules: []
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -50,7 +50,7 @@ metadata:
     app.kubernetes.io/version: 8.4.6
     helm.sh/chart: grafana-6.26.1
   name: demo-grafana
-  namespace: nikita-grafana
+  namespace: dev-grafana
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -4061,7 +4061,7 @@ data:
 kind: ConfigMap
 metadata:
   name: argocd-dashboards-cm-h79cdccct7
-  namespace: nikita-grafana
+  namespace: dev-grafana
 ---
 apiVersion: v1
 data:
@@ -4105,7 +4105,7 @@ metadata:
     app.kubernetes.io/version: 8.4.6
     helm.sh/chart: grafana-6.26.1
   name: demo-grafana
-  namespace: nikita-grafana
+  namespace: dev-grafana
 ---
 apiVersion: v1
 data:
@@ -4125,16 +4125,16 @@ metadata:
     app.kubernetes.io/version: 8.4.6
     helm.sh/chart: grafana-6.26.1
   name: demo-grafana-test
-  namespace: nikita-grafana
+  namespace: dev-grafana
 ---
 apiVersion: v1
 data:
-  GF_SERVER_ROOT_URL: https://nikita-grafana.demo.akuity.io
-  NAMESPACE: nikita-grafana
+  GF_SERVER_ROOT_URL: https://dev-grafana.demo.akuity.io
+  NAMESPACE: dev-grafana
 kind: ConfigMap
 metadata:
-  name: env-cm-h2hh7hc827
-  namespace: nikita-grafana
+  name: env-cm-4tbbtk4mc5
+  namespace: dev-grafana
 ---
 apiVersion: v1
 kind: Service
@@ -4146,7 +4146,7 @@ metadata:
     app.kubernetes.io/version: 8.4.6
     helm.sh/chart: grafana-6.26.1
   name: demo-grafana
-  namespace: nikita-grafana
+  namespace: dev-grafana
 spec:
   ports:
   - name: service
@@ -4168,7 +4168,7 @@ metadata:
     app.kubernetes.io/version: 8.4.6
     helm.sh/chart: grafana-6.26.1
   name: demo-grafana
-  namespace: nikita-grafana
+  namespace: dev-grafana
 spec:
   replicas: 1
   revisionHistoryLimit: 10
@@ -4211,7 +4211,7 @@ spec:
           value: /etc/grafana/provisioning
         envFrom:
         - configMapRef:
-            name: env-cm-h2hh7hc827
+            name: env-cm-4tbbtk4mc5
             optional: false
         image: grafana/grafana:8.4.6
         imagePullPolicy: IfNotPresent
@@ -4273,7 +4273,7 @@ apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: admin-creds
-  namespace: nikita-grafana
+  namespace: dev-grafana
 spec:
   data:
   - remoteRef:
@@ -4329,11 +4329,11 @@ metadata:
     app.kubernetes.io/version: 8.4.6
     helm.sh/chart: grafana-6.26.1
   name: demo-grafana
-  namespace: nikita-grafana
+  namespace: dev-grafana
 spec:
   ingressClassName: traefik
   rules:
-  - host: nikita-grafana.demo.akuity.io
+  - host: dev-grafana.demo.akuity.io
     http:
       paths:
       - backend:
@@ -4356,7 +4356,7 @@ metadata:
     app.kubernetes.io/version: 8.4.6
     helm.sh/chart: grafana-6.26.1
   name: demo-grafana-test
-  namespace: nikita-grafana
+  namespace: dev-grafana
 spec:
   containers:
   - command:
