@@ -27,6 +27,12 @@ admin:
 envFromConfigMaps:
 - name: env-cm
 
+extraSecretMounts:
+- name: secret-files
+  mountPath: /etc/secrets
+  secretName: grafana-secret-files
+  readOnly: true
+
 datasources:
  datasources.yaml:
    apiVersion: 1
