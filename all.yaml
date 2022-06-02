@@ -4253,6 +4253,10 @@ spec:
         - mountPath: /etc/grafana/provisioning/dashboards/dashboardproviders.yaml
           name: config
           subPath: dashboardproviders.yaml
+        - mountPath: /etc/secrets
+          name: secret-files
+          readOnly: true
+          subPath: null
       enableServiceLinks: true
       securityContext:
         fsGroup: 472
@@ -4268,6 +4272,10 @@ spec:
         name: dashboards-argocd
       - emptyDir: {}
         name: storage
+      - name: secret-files
+        secret:
+          defaultMode: null
+          secretName: grafana-secret-files
 ---
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
@@ -4284,12 +4292,46 @@ spec:
       key: /demo/grafana/admin-password
       version: v1
     secretKey: password
-  refreshInterval: 1h
+  refreshInterval: 1m
   secretStoreRef:
     kind: ClusterSecretStore
     name: fake
   target:
     name: admin-creds
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: grafana-secret-files
+  namespace: dev-grafana
+spec:
+  data:
+  - remoteRef:
+      key: /demo/grafana/admin-user
+      version: v1
+    secretKey: user
+  - remoteRef:
+      key: /demo/grafana/admin-password
+      version: v1
+    secretKey: password
+  refreshInterval: 1m
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: fake
+  target:
+    name: grafana-secret-files
+    template:
+      data:
+        datasource.yaml: |
+          datasources:
+          - name: Graphite
+            type: graphite
+            access: proxy
+            url: http://localhost:8080
+            password: "{{ .password }}"
+            user: "{{ .user }}"
+      engineVersion: v2
+      type: kubernetes.io/tls
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
