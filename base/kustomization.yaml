@@ -11,8 +11,7 @@ helmCharts:
 
 resources:
 - namespace.yaml
-- admin-creds.yaml
-- secret-files.yaml
+- secrets
 
 generators:
 - configmap-dashboards.yaml
