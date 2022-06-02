@@ -4331,7 +4331,7 @@ spec:
             password: "{{ .password }}"
             user: "{{ .user }}"
       engineVersion: v2
-      type: kubernetes.io/tls
+      type: Opaque
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
