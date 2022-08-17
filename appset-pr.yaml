@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: ephemeral-envs
+spec:
+  generators:
+  - pullRequest:
+      github:
+        owner: nikita-akuity
+        repo: grafana-delivery
+  template:
+    metadata:
+      name: 'grafana-pr-{{number}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/nikita-akuity/grafana-delivery.git
+        targetRevision: '{{head_sha}}'
+        path: '.'
+      destination:
+        server: http://cluster-cluster-2:8001
+        namespace: 'pr-{{number}}'
+      syncPolicy:
+        syncOptions:
+        - createNamespace=true
